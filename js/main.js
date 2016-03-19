@@ -63,17 +63,15 @@ var KAIZEN_LASHES = (function () {
         var $modalPhotoView = $('#modal-photo-view');
 
         $('.gallery-photo').on('click', function () {
-            $modalPhotoView // Empty current photo and replace with correct one
+            // Empty current photo and replace with correct one
+            $modalPhotoView
                 .empty()
                 .html('<img id="current-image" src="images/' + $(this).find('img').attr('id') + '.jpg" class="large-image">');
             showModal();
-
             $(document).on('keyup', function (e) {
                 var currPhoto,
                     prevPhoto,
-                    nextPhoto,
-                    firstPhoto,
-                    lastPhoto;
+                    nextPhoto;
 
                 if (e.keyCode === 27) { // Esc key
                     hideModal();
@@ -83,26 +81,43 @@ var KAIZEN_LASHES = (function () {
                     prevPhoto = $($("#" + currPhoto).parent().prev().children()[0]).attr('src');
                     if (prevPhoto !== undefined) {
                         $modalPhotoView.html('<img id="current-image" src=' + prevPhoto + ' class="large-image">');
-                    } else {
-                        lastPhoto = $galleryContent.find(':last-child :first-child').attr('src');
-                        $modalPhotoView.html('<img id="current-image" src=' + lastPhoto + ' class="large-image">');
                     }
                 } else if (e.keyCode === 39) { // Right arrow
                     currPhoto = $('#current-image').attr('src').slice(7, -4);
                     nextPhoto = $($("#" + currPhoto).parent().next().children()[0]).attr('src');
                     if (nextPhoto !== undefined) {
                         $modalPhotoView.html('<img id="current-image" src=' + nextPhoto + ' class="large-image">');
-                    } else {
-                        firstPhoto = $galleryContent.find(':first-child :first-child').attr('src');
-                        $modalPhotoView.html('<img id="current-image" src=' + firstPhoto + ' class="large-image">');
                     }
                 }
             });
-
-            $('#gallery-image').on('click', function (e) {
+            // $(window).on('swiperight', function () {
+            //     var currPhoto,
+            //         nextPhoto;
+            //
+            //     currPhoto = $('#current-image').attr('src').slice(7, -4);
+            //     nextPhoto = $($("#" + currPhoto).parent().next().children()[0]).attr('src');
+            //     if (nextPhoto !== undefined) {
+            //         $modalPhotoView.html('<img id="current-image" src=' + nextPhoto + ' class="large-image">');
+            //     }
+            // });
+            // $(window).on('swipeleft', function () {
+            //     var currPhoto,
+            //         prevPhoto;
+            //
+            //     currPhoto = $('#current-image').attr('src').slice(7, -4);
+            //     prevPhoto = $($("#" + currPhoto).parent().prev().children()[0]).attr('src');
+            //     if (prevPhoto !== undefined) {
+            //         $modalPhotoView.html('<img id="current-image" src=' + prevPhoto + ' class="large-image">');
+            //     }
+            // });
+            $('#current-image').on('click', function (e) {
+                e.stopPropagation();
+            });
+            $('#gallery-photo').on('click', function (e) {
                 e.stopPropagation();
                 hideModal();
                 $(this).off('click');
+                $('#current-image').off('click');
             });
         });
     };
@@ -127,6 +142,7 @@ var KAIZEN_LASHES = (function () {
         } else {
             $('.gallery-photo').off('click');
             $(document).off('keyup');
+            $('#current-image').off('click');
         }
 
         window.scrollTo(0, 0);
