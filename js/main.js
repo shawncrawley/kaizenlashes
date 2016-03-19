@@ -29,7 +29,7 @@ var KAIZEN_LASHES = (function () {
      ******FUNCTION DECLARATIONS******
      *********************************/
     initializeJqueryVariables = function () {
-        $galleryContent = $('#content-gallery');
+        $galleryContent = $('#content-gallery').find('.flex-container-row');
         $homeContent = $('#content-home');
     };
 
@@ -190,14 +190,14 @@ var KAIZEN_LASHES = (function () {
     /*--------------------------------
      ****ENABLE FACEBOOK CONTENT******
      ********************************/
-    (function (d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {
-            return;
-        }
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "http://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+    // (function (d, s, id) {
+    //     var js, fjs = d.getElementsByTagName(s)[0];
+    //     if (d.getElementById(id)) {
+    //         return;
+    //     }
+    //     js = d.createElement(s);
+    //     js.id = id;
+    //     js.src = "http://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
+    //     fjs.parentNode.insertBefore(js, fjs);
+    // }(document, 'script', 'facebook-jssdk'));
 }());
