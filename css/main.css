@@ -186,18 +186,7 @@ hr {
 .footer-link:hover {
     font-size: 1.55vw;
 }
-#fb-posts {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: space-around;
-    flex-flow: row wrap;
-}
-.fb-post {
-    flex: 0 1 auto;
-    margin: auto;
-}
-#gallery {
+#content-gallery {
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-start;
@@ -268,3 +257,21 @@ hr {
     box-shadow: 1px 1px 3px #000;
 }
 .close:hover { background: #00d9ff; }
+
+#content-deals {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.deal-post {
+    margin: auto;
+    width: 300px;
+}
+.deal-post:not(.fb-post) {
+    text-align: center;
+}
+
+#content-deals img {
+    width: 100%;
+}

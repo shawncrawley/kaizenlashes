@@ -4,24 +4,35 @@ var KAIZEN_LASHES = (function () {
     /*--------------------------------
      *******GLOBAL VARIABLES**********
      *********************************/
-        /*--CONSTANTS--*/
+    /*--CONSTANTS--*/
     var MAIN_PHOTOS = 4,
-        OTH_PHOTOS = 22,
+        OTH_PHOTOS = 23,
         PROD_PHOTOS = 4,
         PHOTO_DISPLAY_TIME = 5000,
-        /*--VARIABLES--*/
+    /*--STANDARD VARIABLES--*/
         photoShowing = 2,  // Photo loop count
         i,
-        /*--FUNCTIONS--*/
+    /*--JQUERY VARIABLES--*/
+        $homeContent,
+        $galleryContent,
+    /*--FUNCTIONS--*/
         showModal,
         hideModal,
         loadGallery,
-        rotatePhotos;
+        loadPageContents,
+        rotatePhotos,
+        initializeJqueryVariables,
+        setGalleryListeners;
 
 
     /*--------------------------------
      ******FUNCTION DECLARATIONS******
      *********************************/
+    initializeJqueryVariables = function () {
+        $galleryContent = $('#content-gallery');
+        $homeContent = $('#content-home');
+    };
+
     showModal = function () {
         $('#modal-link')[0].click();
     };
@@ -36,17 +47,90 @@ var KAIZEN_LASHES = (function () {
             if (!executed) {
                 executed = true;
                 for (i = 1; i <= MAIN_PHOTOS; i++) {
-                    $('#gallery').append('<div class="gallery-photo"><img id="img-' + i + '" src="images/img-' + i + '.jpg"></div>');
+                    $galleryContent.append('<div class="gallery-photo"><img id="img-' + i + '" src="images/img-' + i + '.jpg"></div>');
                 }
                 for (i = 1; i <= OTH_PHOTOS; i++) {
-                    $('#gallery').append('<div class="gallery-photo"><img id="img-oth-' + i + '" src="images/img-oth-' + i + '.jpg"></div>');
+                    $galleryContent.append('<div class="gallery-photo"><img id="img-oth-' + i + '" src="images/img-oth-' + i + '.jpg"></div>');
                 }
                 for (i = 1; i <= PROD_PHOTOS; i++) {
-                    $('#gallery').append('<div class="gallery-photo"><img id="img-product-' + i + '" src="images/img-product-' + i + '.jpg"></div>');
+                    $galleryContent.append('<div class="gallery-photo"><img id="img-product-' + i + '" src="images/img-product-' + i + '.jpg"></div>');
                 }
             }
         };
     }());
+
+    setGalleryListeners = function () {
+        var $modalPhotoView = $('#modal-photo-view');
+
+        $('.gallery-photo').on('click', function () {
+            $modalPhotoView // Empty current photo and replace with correct one
+                .empty()
+                .html('<img id="current-image" src="images/' + $(this).find('img').attr('id') + '.jpg" class="large-image">');
+            showModal();
+
+            $(document).on('keyup', function (e) {
+                var currPhoto,
+                    prevPhoto,
+                    nextPhoto,
+                    firstPhoto,
+                    lastPhoto;
+
+                if (e.keyCode === 27) { // Esc key
+                    hideModal();
+                    $(this).off('keyup');
+                } else if (e.keyCode === 37) { // Left arrow
+                    currPhoto = $('#current-image').attr('src').slice(7, -4);
+                    prevPhoto = $($("#" + currPhoto).parent().prev().children()[0]).attr('src');
+                    if (prevPhoto !== undefined) {
+                        $modalPhotoView.html('<img id="current-image" src=' + prevPhoto + ' class="large-image">');
+                    } else {
+                        lastPhoto = $galleryContent.find(':last-child :first-child').attr('src');
+                        $modalPhotoView.html('<img id="current-image" src=' + lastPhoto + ' class="large-image">');
+                    }
+                } else if (e.keyCode === 39) { // Right arrow
+                    currPhoto = $('#current-image').attr('src').slice(7, -4);
+                    nextPhoto = $($("#" + currPhoto).parent().next().children()[0]).attr('src');
+                    if (nextPhoto !== undefined) {
+                        $modalPhotoView.html('<img id="current-image" src=' + nextPhoto + ' class="large-image">');
+                    } else {
+                        firstPhoto = $galleryContent.find(':first-child :first-child').attr('src');
+                        $modalPhotoView.html('<img id="current-image" src=' + firstPhoto + ' class="large-image">');
+                    }
+                }
+            });
+
+            $('#gallery-image').on('click', function (e) {
+                e.stopPropagation();
+                hideModal();
+                $(this).off('click');
+            });
+        });
+    };
+
+    loadPageContents = function (e) {
+        var hash = window.location.hash.slice(1),
+            infoDivId = 'content-' + hash,
+            $infoDiv = $('#' + infoDivId);
+
+        if (hash === 'gallery-photo' || e.oldURL.indexOf('gallery-photo') !== -1) {
+            return;
+        }
+
+        $infoDiv.fadeIn();  // If no other element info is showing, show the clicked element info
+
+        $('.content').not($infoDiv).slideUp();
+
+        if (infoDivId === "content-gallery") {
+            loadGallery();
+            setGalleryListeners();
+
+        } else {
+            $('.gallery-photo').off('click');
+            $(document).off('keyup');
+        }
+
+        window.scrollTo(0, 0);
+    };
 
     rotatePhotos = function () {
         if (photoShowing > MAIN_PHOTOS) {
@@ -60,8 +144,12 @@ var KAIZEN_LASHES = (function () {
      **********ON PAGE LOAD***********
      *********************************/
     $(function () {
+        initializeJqueryVariables();
 
-        $('#home').fadeIn();
+        window.onhashchange = loadPageContents;
+
+        window.location.hash = 'home';
+        $homeContent.fadeIn();
 
         //Switch main page image every 5 seconds
         setInterval(rotatePhotos, PHOTO_DISPLAY_TIME);
@@ -93,65 +181,9 @@ var KAIZEN_LASHES = (function () {
         // Control fading in/out of different content (a.k.a. "different pages")
         $('.footer-link').on('click', function () {
             var clickedItemId = this.id,
-                sliceIndex = clickedItemId.lastIndexOf('-'),
-                infoDivId = clickedItemId.slice(sliceIndex + 1),
-                $infoDiv = $('#' + infoDivId),
-                $modalPhotoView = $('#modal-photo-view');
+                sliceIndex = clickedItemId.lastIndexOf('-');
 
-            $infoDiv.fadeIn();  // If no other element info is showing, show the clicked element info
-            $('.content').not($infoDiv).slideUp();
-            if (infoDivId === "gallery") {
-                loadGallery();
-
-                $('.gallery-photo').on('click', function () {
-                    $modalPhotoView // Empty current photo and replace with correct one
-                        .empty()
-                        .html('<img id="current-image" src="images/' + $(this).find('img').attr('id') + '.jpg" class="large-image">');
-                    showModal();
-
-                    $(document).on('keyup', function (e) {
-                        var currPhoto,
-                            prevPhoto,
-                            nextPhoto,
-                            firstPhoto,
-                            lastPhoto;
-
-                        if (e.keyCode === 27) { // Esc key
-                            hideModal();
-                            $(this).off('keyup');
-                        } else if (e.keyCode === 37) { // Left arrow
-                            currPhoto = $('#current-image').attr('src').slice(7, -4);
-                            prevPhoto = $($("#" + currPhoto).parent().prev().children()[0]).attr('src');
-                            if (prevPhoto !== undefined) {
-                                $modalPhotoView.html('<img id="current-image" src=' + prevPhoto + ' class="large-image">');
-                            } else {
-                                lastPhoto = $('#gallery').find(':last-child :first-child').attr('src');
-                                $modalPhotoView.html('<img id="current-image" src=' + lastPhoto + ' class="large-image">');
-                            }
-                        } else if (e.keyCode === 39) { // Right arrow
-                            currPhoto = $('#current-image').attr('src').slice(7, -4);
-                            nextPhoto = $($("#" + currPhoto).parent().next().children()[0]).attr('src');
-                            if (nextPhoto !== undefined) {
-                                $modalPhotoView.html('<img id="current-image" src=' + nextPhoto + ' class="large-image">');
-                            } else {
-                                firstPhoto = $('#gallery').find(':first-child :first-child').attr('src');
-                                $modalPhotoView.html('<img id="current-image" src=' + firstPhoto + ' class="large-image">');
-                            }
-                        }
-                    });
-
-                    $('#openModal').on('click', function (e) {
-                        e.stopPropagation();
-                        hideModal();
-                        $(this).off('click');
-                    });
-                });
-
-            } else {
-                $('.gallery-photo').off('click');
-                $(document).off('keyup');
-            }
-            window.scrollTo(0, 0);
+            window.location.hash = clickedItemId.slice(sliceIndex + 1);
         });
     });
 
