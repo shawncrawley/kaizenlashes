@@ -250,10 +250,13 @@ hr {
 .close:hover { background: #00d9ff; }
 
 .deal-post {
-    margin: auto;
+    margin: 5px;
     width: 300px;
     text-align: center;
 }
 #content-deals img {
     width: 100%;
+}
+#deals-container {
+    align-items: flex-start;
 }

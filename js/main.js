@@ -1,4 +1,17 @@
-var KAIZEN_LASHES = (function () {
+// /*jslint
+//  browser, this, multivar
+//  */
+/*global
+ $, window
+ */
+/*property
+ append, attr, children, click, css, empty, fadeIn, find, hash, html, id,
+ indexOf, keyCode, lastIndexOf, length, location, next, not, off, oldURL,
+ on, onhashchange, parent, prev, scrollTo, setInterval, slice, slideDown,
+ slideUp, stopPropagation
+ */
+
+(function () {
     "use strict";
 
     /*--------------------------------
@@ -13,9 +26,9 @@ var KAIZEN_LASHES = (function () {
         photoShowing = 2,  // Photo loop count
         i,
     /*--JQUERY VARIABLES--*/
-        $homeContent,
         $galleryContent,
     /*--FUNCTIONS--*/
+        setInitialEventListeners,
         showModal,
         hideModal,
         loadGallery,
@@ -30,7 +43,6 @@ var KAIZEN_LASHES = (function () {
      *********************************/
     initializeJqueryVariables = function () {
         $galleryContent = $('#content-gallery').find('.flex-container-row');
-        $homeContent = $('#content-home');
     };
 
     showModal = function () {
@@ -122,12 +134,48 @@ var KAIZEN_LASHES = (function () {
         });
     };
 
+    setInitialEventListeners = function () {
+        window.onhashchange = loadPageContents;
+
+        // Control fading in/out of service price info
+        $('.service-tab').on('click', function () {
+            var clickedItemId = this.id,
+                sliceIndex = clickedItemId.lastIndexOf('-'),
+                clickedItem = clickedItemId.slice(0, sliceIndex + 1),
+                infoDivId = clickedItem + "info",
+                $serviceInfo = $('#' + infoDivId),
+                $displayedServiceInfo = $('.services-fees-container[style="display: block;"]');
+            if ($serviceInfo.attr('style') === undefined || $serviceInfo.attr('style') !== "display: block;") {  // If the clicked element info is hidden
+                if ($displayedServiceInfo.length === 0) {   // Check if another element is showing its info
+                    $serviceInfo.slideDown();  // If no other element info is showing, show the clicked element info
+                } else {
+                    $displayedServiceInfo.slideUp(function () {  // Otherwise, fade out the showing element info
+                        $serviceInfo.slideDown();  // And then show the clicked element info
+                    });
+                }
+                $('.service-text').css("color", "#008060");  // Change all of the color to the default color;
+                $('#' + clickedItemId).children().css("color", "#d699af");  // Change the clicked element text to the highlighted color
+            } else {
+                $serviceInfo.slideUp();  // If the clicked element was already showing, hide it
+                $('#' + clickedItemId).children().css("color", "#008060");  // Change the clicked element text back to the original color
+            }
+        });
+
+        // Control fading in/out of different content (a.k.a. "different pages")
+        $('.footer-link').on('click', function () {
+            var clickedItemId = this.id,
+                sliceIndex = clickedItemId.lastIndexOf('-');
+
+            window.location.hash = clickedItemId.slice(sliceIndex + 1);
+        });
+    };
+
     loadPageContents = function (e) {
         var hash = window.location.hash.slice(1),
             infoDivId = 'content-' + hash,
             $infoDiv = $('#' + infoDivId);
 
-        if (hash === 'gallery-photo' || e.oldURL.indexOf('gallery-photo') !== -1) {
+        if (hash === 'gallery-photo' || (e && e.oldURL.indexOf('gallery-photo') !== -1)) {
             return;
         }
 
@@ -161,46 +209,16 @@ var KAIZEN_LASHES = (function () {
      *********************************/
     $(function () {
         initializeJqueryVariables();
-
-        window.onhashchange = loadPageContents;
-
-        window.location.hash = 'home';
-        $homeContent.fadeIn();
+        setInitialEventListeners();
 
         //Switch main page image every 5 seconds
-        setInterval(rotatePhotos, PHOTO_DISPLAY_TIME);
+        window.setInterval(rotatePhotos, PHOTO_DISPLAY_TIME);
 
-        // Control fading in/out of service price info
-        $('.service-tab').on('click', function () {
-            var clickedItemId = this.id,
-                sliceIndex = clickedItemId.lastIndexOf('-'),
-                clickedItem = clickedItemId.slice(0, sliceIndex + 1),
-                infoDivId = clickedItem + "info",
-                $serviceInfo = $('#' + infoDivId),
-                $displayedServiceInfo = $('.services-fees-container[style="display: block;"]');
-            if ($serviceInfo.attr('style') === undefined || $serviceInfo.attr('style') !== "display: block;") {  // If the clicked element info is hidden
-                if ($displayedServiceInfo.length === 0) {   // Check if another element is showing its info
-                    $serviceInfo.slideDown();  // If no other element info is showing, show the clicked element info
-                } else {
-                    $displayedServiceInfo.slideUp(function () {  // Otherwise, fade out the showing element info
-                        $serviceInfo.slideDown();  // And then show the clicked element info
-                    });
-                }
-                $('.service-text').css("color", "#008060");  // Change all of the color to the default color;
-                $('#' + clickedItemId).children().css("color", "#d699af");  // Change the clicked element text to the highlighted color
-            } else {
-                $serviceInfo.slideUp();  // If the clicked element was already showing, hide it
-                $('#' + clickedItemId).children().css("color", "#008060");  // Change the clicked element text back to the original color
-            }
-        });
-
-        // Control fading in/out of different content (a.k.a. "different pages")
-        $('.footer-link').on('click', function () {
-            var clickedItemId = this.id,
-                sliceIndex = clickedItemId.lastIndexOf('-');
-
-            window.location.hash = clickedItemId.slice(sliceIndex + 1);
-        });
+        if (window.location.hash === '') {
+            window.location.hash = 'home';
+        } else {
+            loadPageContents();
+        }
     });
 
     /*--------------------------------
