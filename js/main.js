@@ -19,7 +19,7 @@
      *********************************/
     /*--CONSTANTS--*/
     var MAIN_PHOTOS = 4,
-        OTH_PHOTOS = 23,
+        OTH_PHOTOS = 36,
         PROD_PHOTOS = 4,
         PHOTO_DISPLAY_TIME = 5000,
     /*--STANDARD VARIABLES--*/

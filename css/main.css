@@ -57,6 +57,12 @@ hr {
     flex-flow: row wrap;
     align-content: space-between;
 }
+#social {
+    width: 20%;
+    position: fixed;
+    top: 45px;
+    left: 40px;
+}
 #social img {
     display: inline-block;
     width: 22%;
@@ -115,7 +121,7 @@ hr {
     width: 35%;
 }
 #services-tabs-container {
-    width: 75%;
+    width: 60%;
     margin: auto;
     line-height: 1.5vw;
     flex-flow: row nowrap;
@@ -259,4 +265,7 @@ hr {
 }
 #deals-container {
     align-items: flex-start;
+}
+#content-deals p {
+    font-size: 14pt;
 }
