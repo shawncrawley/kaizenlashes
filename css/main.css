@@ -57,6 +57,16 @@ hr {
     flex-flow: row wrap;
     align-content: space-between;
 }
+.flex-two-colum {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-flow: row nowrap;
+    align-content: center;
+}
+.readable {
+    font-size: 14pt;
+}
 #social {
     width: 20%;
     position: fixed;

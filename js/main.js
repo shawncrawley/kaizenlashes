@@ -8,7 +8,7 @@
  append, attr, children, click, css, empty, fadeIn, find, hash, html, id,
  indexOf, keyCode, lastIndexOf, length, location, next, not, off, oldURL,
  on, onhashchange, parent, prev, scrollTo, setInterval, slice, slideDown,
- slideUp, stopPropagation
+ slideUp, stopPropagation, top, left, bottom, right
  */
 
 (function () {
@@ -19,8 +19,7 @@
      *********************************/
     /*--CONSTANTS--*/
     var MAIN_PHOTOS = 4,
-        OTH_PHOTOS = 36,
-        PROD_PHOTOS = 4,
+        OTH_PHOTOS = 32,
         PHOTO_DISPLAY_TIME = 5000,
     /*--STANDARD VARIABLES--*/
         photoShowing = 2,  // Photo loop count
@@ -63,9 +62,6 @@
                 }
                 for (i = 1; i <= OTH_PHOTOS; i++) {
                     $galleryContent.append('<div class="gallery-photo"><img id="img-oth-' + i + '" src="images/img-oth-' + i + '.jpg"></div>');
-                }
-                for (i = 1; i <= PROD_PHOTOS; i++) {
-                    $galleryContent.append('<div class="gallery-photo"><img id="img-product-' + i + '" src="images/img-product-' + i + '.jpg"></div>');
                 }
             }
         };
