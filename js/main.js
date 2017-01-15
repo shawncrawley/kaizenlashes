@@ -58,10 +58,10 @@
             if (!executed) {
                 executed = true;
                 for (i = 1; i <= MAIN_PHOTOS; i++) {
-                    $galleryContent.append('<div class="gallery-photo"><img id="img-' + i + '" src="images/img-' + i + '.jpg"></div>');
+                    $galleryContent.append('<div class="gallery-photo"><img id="img-' + i + '" src="images/thumbnails/img-' + i + '.jpg"></div>');
                 }
                 for (i = 1; i <= OTH_PHOTOS; i++) {
-                    $galleryContent.append('<div class="gallery-photo"><img id="img-oth-' + i + '" src="images/img-oth-' + i + '.jpg"></div>');
+                    $galleryContent.append('<div class="gallery-photo"><img id="img-oth-' + i + '" src="images/thumbnails/img-oth-' + i + '.jpg"></div>');
                 }
             }
         };
@@ -86,13 +86,13 @@
                     $(this).off('keyup');
                 } else if (e.keyCode === 37) { // Left arrow
                     currPhoto = $('#current-image').attr('src').slice(7, -4);
-                    prevPhoto = $($("#" + currPhoto).parent().prev().children()[0]).attr('src');
+                    prevPhoto = $($("#" + currPhoto).parent().prev().children()[0]).attr('src').replace('thumbnails/', '');
                     if (prevPhoto !== undefined) {
                         $modalPhotoView.html('<img id="current-image" src=' + prevPhoto + ' class="large-image">');
                     }
                 } else if (e.keyCode === 39) { // Right arrow
                     currPhoto = $('#current-image').attr('src').slice(7, -4);
-                    nextPhoto = $($("#" + currPhoto).parent().next().children()[0]).attr('src');
+                    nextPhoto = $($("#" + currPhoto).parent().next().children()[0]).attr('src').replace('thumbnails/', '');
                     if (nextPhoto !== undefined) {
                         $modalPhotoView.html('<img id="current-image" src=' + nextPhoto + ' class="large-image">');
                     }
