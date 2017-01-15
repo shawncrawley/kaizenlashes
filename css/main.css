@@ -177,12 +177,14 @@ hr {
     margin: auto;
 }
 #content-img {
+    text-align: center;
     border-radius: 10px;
     overflow-x: hidden;
 }
 #content-img img {
     position: relative;
     width: 100%;
+    max-width: 750px;
 }
 #footer {
     background-color: pink;
