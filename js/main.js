@@ -8,7 +8,7 @@
  append, attr, children, click, css, empty, fadeIn, find, hash, html, id,
  indexOf, keyCode, lastIndexOf, length, location, next, not, off, oldURL,
  on, onhashchange, parent, prev, scrollTo, setInterval, slice, slideDown,
- slideUp, stopPropagation, top, left, bottom, right
+ slideUp, stopPropagation, replace
  */
 
 (function () {
