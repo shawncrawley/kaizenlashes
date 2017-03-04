@@ -75,7 +75,8 @@ hr {
 }
 #social img {
     display: inline-block;
-    width: 22%;
+    width: 20%;
+    border-radius: 7px;
 }
 #social h4 {
     font-size: 1.5vw;
@@ -135,6 +136,7 @@ hr {
     margin: auto;
     line-height: 1.5vw;
     flex-flow: row nowrap;
+    height: 5vw;
 }
 .service-tab {
     flex: 0 1 auto;
@@ -142,6 +144,7 @@ hr {
     padding: 10px;
     text-align: center;
     cursor: pointer;
+    min-width: 12%;
 }
 .service-text {
     font-size: 1.5vw;
