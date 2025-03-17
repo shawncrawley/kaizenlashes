@@ -18,7 +18,7 @@
      *******GLOBAL VARIABLES**********
      *********************************/
     /*--CONSTANTS--*/
-    var MAIN_PHOTOS = 4,
+    var MAIN_PHOTOS = 7,
         OTH_PHOTOS = 32,
         PHOTO_DISPLAY_TIME = 5000,
     /*--STANDARD VARIABLES--*/
