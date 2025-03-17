@@ -1,5 +1,7 @@
 body {
     background-image: url("../images/img-background.jpg");
+    background-repeat: repeat; /* Do not repeat the image */
+    background-size: 5% 5%; /* Resize the background image to cover the entire container */
     margin: 30px;
     color: #008060;
     overflow-x: hidden;
